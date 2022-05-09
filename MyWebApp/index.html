@@ -1,1 +1,447 @@
-test
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <title>MSB Collections Map</title>
+    <link rel="icon" type="image/x-icon" href="icons/lizard.png">
+
+    <meta itemprop="name" content="DC.js + Leaflet" />
+    <meta itemprop="description" content="DC.js + Leaflet chart" />
+
+    <meta charset="UTF-8">
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" type="text/css" href="myCSS_styleFiles/myStyle.css">
+    <link type="text/css" href="JS_CSS_downloaded_libraries/css/leaflet.css" rel="stylesheet" />
+    <link type="text/css" href="JS_CSS_downloaded_libraries/css/MarkerCluster.Default.css" rel="stylesheet" />
+    <link type="text/css" href="JS_CSS_downloaded_libraries/css/MarkerCluster.css" rel="stylesheet" />
+    <link type="text/css" href="JS_CSS_downloaded_libraries/css/dc.css" rel="stylesheet" />
+    <link type="text/css" href="JS_CSS_downloaded_libraries/css/leaflet-legend.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- SCRIPTS -->
+    <script src="myJS_scripts/myJS.js"></script>
+    <script type="text/javascript" src="JS_CSS_downloaded_libraries/js/d3.js"></script>
+    <script type="text/javascript" src="JS_CSS_downloaded_libraries/js/loader.js"></script>
+    <script type="text/javascript" src="JS_CSS_downloaded_libraries/js/crossfilter.js"></script>
+    <script type="text/javascript" src="JS_CSS_downloaded_libraries/js/dc.js"></script>
+    <script type="text/javascript" src="JS_CSS_downloaded_libraries/js/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="JS_CSS_downloaded_libraries/js/colorbrewer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+
+    <!--Optional-->
+    <script type="text/javascript" src="JS_CSS_downloaded_libraries/js/leaflet.markercluster-src.js"></script>
+    <script type="text/javascript" src="JS_CSS_downloaded_libraries/js/dc.leaflet.js"></script>
+
+
+</head>
+
+<body>
+    <div id="loadingGIF"></div>
+
+    <!-- NEW -->
+    <!-- NavBar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand d-none d-lg-block" href="#"><img class="logo" alt="unm logo"
+                src="images/unm-logo.png">Museum of
+            Southwestern Biology Collections</a>
+        <a class="navbar-brand d-lg-none" href="#"><img class="logo" alt="unm logo" src="images/unm-logo.png">MSB
+            Collections</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+
+                <!-- Buttons (Modal content at bottom of document) -->
+                <!-- How To Use Button -->
+                <li><button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal"
+                        data-target="#how-modal" data-backdrop="true">How To Use</button></li>
+
+                <!-- Data Button -->
+                <li><button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal"
+                        data-target="#myModal" class="myModal" data-backdrop="true">Data Visualization</button></li>
+
+                <!-- About Button -->
+                <li><button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal"
+                        data-target="#about-modal" data-backdrop="true">About</button></li>
+
+                <!-- Resources Button -->
+                <li><button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal"
+                        data-target="#resources-modal" data-backdrop="true">Resources</button></li>
+
+                <!-- MSB Website Button -->
+                <li><button type="button" class="btn btn-primary btn-sm btn-block"><a href="http://www.msb.unm.edu/"
+                            target="_blank">Museum Information</a></button></li>
+
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="row">
+        <!-- Map -->
+        <div class="column col-md-12 col-lg-9 d-flex">
+            <div class='map' id='cluster-map'>
+                <div class="legend">
+                    <h5 class="d-flex justify-content-center">Collections Key</h5>
+                    <p><img src="icons/rat.png"> Mammology<br>
+                        <img src="icons/plant.png"> Herbarium<br>
+                        <img src="icons/bird.png"> Ornithology<br>
+                        <img src="icons/fish.png"> Ichthyology<br>
+                        <img src="icons/lizard.png"> Herpetology<br>
+                        <img src="icons/beetle.png"> Arthropods<br>
+                        <img src="icons/parasite.png"> Parasites<br>
+                        <img src="icons/host.png"> Hosts
+                    </p>
+                </div>
+                <div class="download-button"><button type="button" class="btn btn-success btn-sm btn-block">Download
+                        Data</button>
+                </div>
+            </div>
+            <div id='cluster-map-anchor'></div>
+        </div>
+
+        <!-- Filtering options on right side -->
+        <div id="filters" class="column col-md-12 col-lg-3 d-flex justify-content-center">
+            <!--Pie Chart-->
+            <div class="text">
+                <p><strong>Filter by Specimen Type</strong></p>
+                <p style="font-size: 10px"><i>Click on the pie chart segment to filter</i></p>
+                <div class="pie d-flex justify-content-center"></div>
+            </div>
+
+            <!-- Select Menus -->
+            <div class="text2">
+                <p><strong>Filter by Taxon</strong></p>
+                <p style="font-size: 10px"><i>Select which orders (left), families (center), and genera (right) to
+                        filter</i></p>
+                <div class="selectMenus d-flex justify-content-center">
+                    <div class="selectOrder d-flex justify-content-center"></div>
+                    <div class="selectFamily d-flex justify-content-center"></div>
+                    <div class="selectGenus d-flex justify-content-center"></div>
+                </div>
+            </div>
+
+            <!-- Year Filter Bar Chart -->
+            <div class="text3">
+                <p><strong>Filter by Year of Collection</strong></p>
+                <p style="font-size: 10px"><i>Highlight part of graph to filter</i></p>
+                <div class="year-filter d-flex justify-content-center" id="yearly-move-chart"></div>
+            </div>
+
+
+            <!--Legend for map icons-->
+            <div class="container text-center">
+                <br>
+                <br>
+                <!-- Original Legend -->
+                <!-- <p><strong>Types of Specimens</strong></p>
+                <div class="row justify-content-center">
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Mammalogy</p>
+                        <img src="icons/rat.png" alt="Mammal Icon" style="width:50px;height:50px;">
+                    </div>
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Herbarium</p>
+                        <img src="icons/plant.png" alt="Herbarium Icon" style="width:50px;height:50px;">
+                    </div>
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Ornithology</p>
+                        <img src="icons/bird.png" alt="Ornithology Icon" style="width:50px;height:50px;">
+                    </div>
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Ichthyology</p>
+                        <img src="icons/fish.png" alt="Ichthyology Icon" style="width:50px;height:50px;">
+                    </div>
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Herpetology</p>
+                        <img src="icons/lizard.png" alt="Herpetology Icon" style="width:50px;height:50px;">
+                    </div>
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Arthropods</p>
+                        <img src="icons/beetle.png" alt="Arthropods Icon" style="width:50px;height:50px;">
+                    </div>
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Parasites</p>
+                        <img src="icons/parasite.png" alt="Parasite Icon" style="width:50px;height:50px;">
+                    </div>
+                    <div class="col-sm-3">
+                        <p style="font-size: 10px">Hosts</p>
+                        <img src="icons/host.png" alt="Host Icon" style="width:50px;height:50px;">
+                    </div>
+                </div> -->
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Table -->
+    <!-- <div class="row">
+            <table class="table table-bordered table-striped" id="data-table">
+                <thead>
+                    <tr class="table-header">
+                        <th>CatalogNumber</th>
+                        <th>Collection</th>
+                        <th>Order</th>
+                        <th>Family</th>
+                        <th>Genus</th>
+                        <th>Species</th>
+                        <th>Year</th>
+                        <th>Coordinates</th>
+                    </tr>
+                </thead>
+            </table>
+    </div> -->
+
+
+    <!-- MODALS -->
+
+    <!-- How To USe Modal -->
+    <div class="modal fade" id="how-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel">
+                        How to Use this Web App
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5><b>Filtering Options:</b></h5>
+                    <p><b>Pie Chart:</b>The pie chart shows the specimen types broken into different taxa. Try choosing
+                        one of the pie sections to filter to the map to selection. You can select more than one at the
+                        same time!</p>
+                    <p><b>Filter by Taxon:</b>After selecting the taxons you want to look at, you can take a look at
+                        specific orders, families, and genuses.</p>
+                    <p><b>Filter by Year: </b>The Museum of Southwestern Biology has specimens that were collected over
+                        50
+                        years ago! You can filter the specimen results by year if you would like. *Note: Specimens
+                        with the year 1900 have an unknown date of collection*</p>
+                    <h5><b>Downloading Data:</b></h5>
+                    <p>After filtering data by specimen, taxon, and year, you can download the data for the collections
+                        in the viewable portion of the map.
+                        Simply zoom in to the area you want to download data for, and click the green "Download Data"
+                        button in the bottom right corner of the map.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Visualization -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel">
+                        MSB Collections Data Visualization
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <br>
+                    <h5><b>Collection Sizes:</b></h5>
+                    <p>Hover over each bar to see the size of each collection</p>
+                    <div class="chart" id="chart_div"></div>
+                    <br>
+                    <h5><b>Collection Over Time:</b></h5>
+                    <p>Click and drag over a section of the chart to zoom in. Double click to zoom out. Hover over each
+                        collection in the legend to highlight only that collection.</p>
+                    <div class="chart" id="stacked-area"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel">
+                        About the Museum of Southwestern Biology Collections Map
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5><b>About the project:</b></h5>
+                    <p>This web map was designed with the intention of making museum data more accessible
+                        to those that are interested in museum science. With this map users can select a
+                        taxa that interests them and visualize specimen locations on an interactive map of
+                        the United States.
+                        Our hope is that this map appeals to a wide range of users from a casual person
+                        interested in science to a scientist looking for detailed data about collections.
+                    </p>
+                    <h5><b>About the team:</b></h5>
+                    <ul>
+                        <li>Team member: <a href="https://juancamacho-1.github.io/" target="_blank">Juan
+                                Camacho</a> (juancamacho@unm.edu)</li>
+                        <li>Team member: <a href="https://jkleinkopf.com" target="_blank">Joseph Kleinkopf</a>
+                            (jkleinkopf@unm.edu)</li>
+                        <li>Team member: <a href="https://eve-row.github.io/" target="_blank">Eve Rowland</a>
+                            (erowland@unm.edu)</li>
+                        <li>Project advisor: <a href="https://www.lipingyang.org/" target="_blank">Dr. Liping
+                                Yang</a> (lipingyang@unm.edu)</li>
+                    </ul><br>
+                    <h5><b>Data Sources</b></h5>
+                    <p>Collections data from the MSB are generally available in public databases and can be
+                        searched and downloaded. Specimen data from each collection is housed in one of
+                        three databases (Arctos, SEINet, or SCAN) and consolidated alongside collections
+                        around the world at GBIF.</p>
+                    <ul>
+                        <li><a href="https://arctosdb.org/" target="_blank">Arctos Database (most
+                                animals)</a></li>
+                        <li><a href="https://swbiodiversity.org/seinet/" target="_blank">SEINet Data Portal
+                                (plants)</a></li>
+                        <li><a href="https://scan-bugs.org/portal/index.php" target="_blank">SCAN database
+                                (arthropods)</a></li>
+                        <li><a href="https://gbif.org" target="_blank">Global Biodiversity Information
+                                Facility (GBIF)</a></li>
+                    </ul>
+                    <h5><b>References</b></h5>
+                    <p>The resources below were vital for the design and implementation of this web app.</p>
+                    <ul>
+                        <li><b>User Interface</b></li>
+                        <ul>
+                            <li><a href="https://apps.neotomadb.org/explorer/" target="_blank">Neotoma Explorer Map</a>
+                            </li>
+                            <li><a href="https://dc-js.github.io/dc.leaflet.js/" target="_blank">dc.leaflet.js Demo</a>
+                            </li>
+                            <li><a href="https://github.com/austinlyons/dcjs-leaflet-untappd" target="_blank">Auston
+                                    Lyons' D3 Crossfilter Tutorial</a></li>
+                            <li><a href="https://turanfarsyth.github.io/MyWebApp/index.html" target="_blank">Tura
+                                    Williams' World Language Map Explorer</a></li>
+                            <li><a href="https://lipingyang.org/ylpTeaching.html" target="_blank">Materials from Dr.
+                                    Liping Yang's Internet Mapping course at the University of New Mexico</a></li>
+                        </ul>
+                        <li><b>Filtering Options</b></li>
+                        <ul>
+                            <li><a href="https://dc-js.github.io/dc.js/examples/pie.html" target="_blank">dc.js
+                                    Pie Chart Example</a></li>
+                            <li><a href="https://dc-js.github.io/dc.js/examples/select.html" target="_blank">dc.js
+                                    Select Menu Example</a></li>
+                            <li><a href="https://dc-js.github.io/dc.js/examples/bar.html" target="_blank">dc.js
+                                    Bar Chart Example</a></li>
+                            <li><a href="https://dc-js.github.io/dc.js/examples/download-table.html"
+                                    target="_blank">dc.js Download Table Example</a></li>
+
+                        </ul>
+                        <li><b>Javascript Libraries and Plugins Used</b></li>
+                        <ul>
+                            <li><a href="https://github.com/d3/d3" target="_blank">D3</a></li>
+                            <li><a href="https://dc-js.github.io/dc.js/" target="_blank">DC</a></li>
+                            <li><a href="https://github.com/crossfilter/crossfilter" target="_blank">Crossfilter</a></li>
+                            <li><a href="https://github.com/ember-cli/loader.js/" target="_blank">Loader</a></li>
+                            <li><a href="https://github.com/Leaflet/Leaflet" target="_blank">Leaflet</a></li>
+                            <li><a href="https://github.com/jquery/jquery" target="_blank">jQuery</a></li>
+                            <li><a href="https://github.com/twbs/bootstrap" target="_blank">Bootstrap</a></li>                            
+                            <li><a href="https://github.com/eligrey/FileSaver.js/" target="_blank">Filesaver</a></li>                            
+                            <li><a href="https://github.com/dc-js/dc.leaflet.js" target="_blank">dc.leaflet.js</a></li>                            
+                            <li><a href="https://github.com/Leaflet/Leaflet.markercluster" target="_blank">Leaflet Markercluster</a></li> 
+                        </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Modal -->
+    <div class="modal fade" id="resources-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title w-100" id="exampleModalLabel">Map Resources</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5><b>Overview</b></h5>
+                    <p>The University of New Mexico's Museum of Southwestern Biology (MSB) is an important
+                        repository for biological data from New Mexico, with collections spanning over a
+                        century. Click the links below to visit pages for information on the MSB.</p>
+                    <ul>
+                        <li><a href="http://msb.unm.edu/" target="_blank">MSB Homepage</a></li>
+                        <li><a href="http://msb.unm.edu/contact-us/index.html" target="_blank">Contact a
+                                curator</a></li>
+                    </ul><br>
+
+
+
+                    <h5><b>Natural History Museums</b></h5>
+                    <p>Museums across the world house millions of collections, with many on display for
+                        educational purposes and many more preserved for facilitating scientific research.
+                        <a href="https://www.amnh.org/research/scientific-collections" target="_blank">The
+                            utility of museum collections is outstanding</a>! Collections have been utilized
+                        in species classification (and discovery), ecology research, conservation research,
+                        and more recently, in disease research.
+                        We will undoubtedly see new uses for collections in the not so far future! Click the
+                        links below to check out some famous natural history museums.
+                    </p>
+
+                    <ul>
+                        <li><a href="https://www.nmnaturalhistory.org/" target="_blank">New Mexico Museum of
+                                Natural History and Science</a></li>
+                        <li><a href="https://www.amnh.org/" target="_blank">American Museum of Natural
+                                History</a></li>
+                        <li><a href="https://www.si.edu/museums/natural-history-museum" target="_blank">Smithsonian
+                                National Museum of Natural History</a></li>
+                        <li><a href="https://www.fieldmuseum.org/" target="_blank">The Field Museum</a></li>
+                        <li><a href="https://www.nhm.ac.uk/" target="_blank">Natural History Museum, London,
+                                UK</a></li>
+                        <li><a href="https://www.mnhn.fr/en" target="_blank">Muséum National d'Histoire
+                                Naturelle, Paris, France</a></li>
+                    </ul><br>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hide loader after 15 seconds, even if the page hasn't finished loading
+        jQuery('#loadingGIF').fadeOut(15 * 1000);
+
+    </script>
+
+
+</body>
+
+</html>
